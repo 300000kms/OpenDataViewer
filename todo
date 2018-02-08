@@ -1,0 +1,47 @@
+
+
+http://opendata-ajuntament.barcelona.cat/data/es/dataset
+
+http://opendata-ajuntament.barcelona.cat/es/api-cataleg
+
+
+https://stackoverflow.com/questions/11841486/datatables-drill-down-rows-with-nested-independent-table
+
+
+documentra:
+https://github.com/handsontable
+https://github.com/sheetjs
+
+https://www.totaljs.com/
+
+https://gojs.net/latest/samples/sankey.html
+
+
+http://glueviz.org/en/v0.7.x/installation.html
+
+
+
+
+
+
+//filtrado de columna segun contenido de la celda
+al pinchar la celda aparece un icono de filtro que si es predsionado se filtra...
+
+//hacer un encabezado resumen del asunto
+tipo dashboard rápido, a partir del cual poder filtrar
+- numero de datasets, 
+por número de años
+numero de organismos
+formatos
+el más descargado
+
+sunburst?
++ parallel coordinates
+
+
+//almacenar en firebase algunas estadisticas 
+- como la evolucion del número de descargas
+- cuantas de ellas realizadas desde la plataforma...
+
+
+

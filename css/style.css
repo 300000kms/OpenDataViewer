@@ -1,0 +1,70 @@
+
+html{
+    height:100%;
+    width:100%;
+    margin:0px;
+}
+
+body{
+    height:100%;
+    width:100%;
+    margin:0px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+}
+
+.tab{
+    height:100%;
+    width:100%;
+}
+
+#tab{
+    width:100%;
+}
+
+.cell{
+    display: block; /* or inline-block */
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 2.4em;
+    line-height: 1.2em;
+}
+
+.format{
+    float:left;
+    margin-right:4px;
+    background-color: black;
+    color:white;
+    padding: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 2px
+}
+
+#popup{
+    position: absolute;
+    width:300px;
+    background: white;
+    padding: 10px;
+    border:1px solid rgb(64,64,64)
+}
+
+.csv{background-color: red;}
+/*--------------------------*/
+
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+    line-height: 16px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 4px 4px;
+    vertical-align: top !important;
+}
+
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 1px 10px;
+    border-bottom: 1px solid #111;
+    text-align: left;
+}
