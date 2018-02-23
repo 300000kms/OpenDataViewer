@@ -8,12 +8,14 @@
 function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?callback=jQuery112006745389475568797_1510911664869&_=1510911664870
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=trams&callback=lamevafuncio
-    console.log(urljson)
-    $.ajaxSetup({'cache':true});
     $.ajax({
         url: urljson,
+        type: 'GET',
+        cache:true,
+        //jsonp:'$callback',
         dataType: "jsonp",
         jsonpCallback:'parseData',
+        error: function (x, t, r) { console.log(x,t,r); },
         success: function( data ) {
             doTable(data)
         }
@@ -22,7 +24,8 @@ function getData(urljson){
     
 
 function parseData(data){
-    console.log('/')
+    //console.log(data)
+    //return data
 }
 
 function format(c, v){return v}
@@ -92,7 +95,7 @@ function doTable(data){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
-                console.log(urls[u])
+                //console.log(urls[u])
                 if ( ['', undefined].indexOf(urls[u])==-1){
                     format = urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()
                     html += '<a href="'+'http'+urls[u]+'" class="format '+format+'">'+format+'</a>'
@@ -138,7 +141,16 @@ function doTable(data){
     });
     
     $('#tab_filter label input').attr('placeholder', 'Search')
-    placeholder(dic)
+    
+    //placeholder(dic);
+    
+    $('#tab_filter input').click(function() {
+        $('html, body').animate({
+            scrollTop: $('#tab_filter input').offset().top
+        }, 200);
+    });
+
+    
     popups()
     spinOff()
 }
@@ -175,20 +187,34 @@ function spinOff(){
     window.removeEventListener('scroll', noscroll);
 }
 
-function placeholder(dic){
 
+function placeholder(dic){
+    n = null;
+    c = 0;
     setInterval(function(){
-        r = parseInt(Math.random()*dic.length);
-        $('#tab_filter label input').attr('placeholder', dic[r]['notes'])
-    }, 1000);
+        if (n == null){
+            r = parseInt(Math.random()*dic.length); 
+            n = dic[r]['notes'];
+            n = n.split('. ')[0] 
+            c=0;
+            $('#tab_filter label input').attr('placeholder','')
+        }
+        p=$('#tab_filter label input').attr('placeholder')
+        $('#tab_filter label input').attr('placeholder', p+n[c])
+        c+=1
+        if (n.length==c){n=null}
+    }, 40);
 }
+
+
+
 $(document).ready(function () {
     spinOn()
     city = location.hash;
-    if(city==''){city = 'barcelona'}
-    console.log(city)
+    if(city==''){city = 'barcelona'}else{city=city.replace('#','')}
+    //console.log(city)
     $.getJSON( "cities/"+city+".json", function( data ) {
-        console.log(data)
+        //console.log(data)
         getData(data.url)
         conf(data)
     })
