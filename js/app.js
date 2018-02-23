@@ -21,7 +21,7 @@ function getData(urljson){
         }
     }); 
 }
-    
+
 
 function parseData(data){
     //console.log(data)
@@ -56,7 +56,6 @@ function doTable(data){
     dic = []
     for(d in da){
         for (r in da[d].resources){
-            
             year = da[d].resources[r].name.split('.')[0];
             publication = da[d].resources[r].created.split("T")[0]
             downs = da[d].resources[r].downloads_absolute;
@@ -92,8 +91,7 @@ function doTable(data){
         html += '<td>'+res[r].year+'</td>'
         html += '<td>'+res[r].publication+'</td>'
         
-        if (res[r].url != undefined && typeof(res[r].url) == 'string'){
-            //console.log(res[r].url)
+        if (res[r].url != undefined){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
@@ -106,7 +104,7 @@ function doTable(data){
             html += '</td>'
         }else{html+='<td></td>'}
         
-        if (res[r].url != undefined && typeof(res[r].url) == 'string'){
+        if (res[r].url != undefined){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
@@ -198,6 +196,7 @@ function placeholder(dic){
             r = parseInt(Math.random()*dic.length); 
             n = dic[r]['notes'];
             n = n.split('. ')[0] 
+            n = n.slice(0,100)
             c=0;
             $('#tab_filter label input').attr('placeholder','')
         }
