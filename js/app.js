@@ -142,7 +142,7 @@ function doTable(data){
     
     $('#tab_filter label input').attr('placeholder', 'Search')
     
-    //placeholder(dic);
+    placeholder(dic);
     
     $('#tab_filter input').click(function() {
         $('html, body').animate({
