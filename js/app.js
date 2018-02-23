@@ -56,6 +56,7 @@ function doTable(data){
     dic = []
     for(d in da){
         for (r in da[d].resources){
+            
             year = da[d].resources[r].name.split('.')[0];
             publication = da[d].resources[r].created.split("T")[0]
             downs = da[d].resources[r].downloads_absolute;
@@ -91,7 +92,8 @@ function doTable(data){
         html += '<td>'+res[r].year+'</td>'
         html += '<td>'+res[r].publication+'</td>'
         
-        if (res[r].url != undefined){
+        if (res[r].url != undefined && typeof(res[r].url) == 'string'){
+            //console.log(res[r].url)
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
@@ -104,7 +106,7 @@ function doTable(data){
             html += '</td>'
         }else{html+='<td></td>'}
         
-        if (res[r].url != undefined){
+        if (res[r].url != undefined && typeof(res[r].url) == 'string'){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
