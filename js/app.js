@@ -137,15 +137,15 @@ function doTable(data){
         //columns: [null, null, null, null, null, null, {width: "100%" }]
     });
     
-    console.log($('#tab_filter label').text())
     $('#tab_filter label input').attr('placeholder', 'Search')
+    placeholder(dic)
     popups()
+    spinOff()
 }
 
 function popups(){
     $('body').append('<div id="popup"></div>');
     $('.cell').hover(function(event){
-        //console.log(event)
         $('#popup').html($(this).text());  
         $('#popup').css('top', event.pageY)
         $('#popup').css('left', event.pageX)
@@ -155,12 +155,35 @@ function popups(){
     })
 }
 
+function noscroll() {
+  window.scrollTo( 0, 0 );
+}
+
 function conf(data){
     $('body').append('<div id="main"><div id="city"></div></div>');
     $('#city').html(data.name)
 }
 
+function spinOn(){
+    $('body').append('<div id="spin"><div class="spinner"></div></div>');
+    //anular scroll
+    window.addEventListener('scroll', noscroll);
+}
+
+function spinOff(){
+    $('#spin').remove();
+    window.removeEventListener('scroll', noscroll);
+}
+
+function placeholder(dic){
+
+    setInterval(function(){
+        r = parseInt(Math.random()*dic.length);
+        $('#tab_filter label input').attr('placeholder', dic[r]['notes'])
+    }, 1000);
+}
 $(document).ready(function () {
+    spinOn()
     city = location.hash;
     if(city==''){city = 'barcelona'}
     console.log(city)

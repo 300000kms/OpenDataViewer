@@ -11,6 +11,7 @@ body{
     margin:0px;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
+    overflow-x: hidden;
 }
 
 #main{
@@ -44,6 +45,11 @@ body{
     display: block;
 }
 
+input::placeholder{
+    color:darkgray;
+}
+
+
 #tab_filter label{
     font-size: 0px;
 }
@@ -71,7 +77,15 @@ body{
     line-height: 1.2em;
 }
 
-
+#spin{
+    position: absolute;
+    height: 100%;
+    width:100%;
+    background: white;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+}
 .format{
     margin:2px;
     float:left;
@@ -98,9 +112,10 @@ td a{
 #popup{
     position: absolute;
     width:300px;
-    background: white;
+    background: black;
     padding: 10px;
-    border:1px solid rgb(64,64,64)
+    border:1px solid rgb(64,64,64);
+    color:white;
 }
 
 .csv{background-color: black;}
@@ -173,4 +188,36 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
     content: '-';
     background-color: #b1b1b1;
+}
+
+/*-------------------------*/
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin: 100px auto;
+  background-color: #333;
+
+  border-radius: 100%;  
+  -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+  0% { -webkit-transform: scale(0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-scaleout {
+  0% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
 }
