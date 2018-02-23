@@ -107,8 +107,8 @@ function doTable(data){
         }else{html+='<td></td>'}
         
         if (res[r].url != undefined  && typeof(res[r].url) == 'string'){
-            urls =res[r].url.split('http')
-            html += '<td>'
+            urls =res[r].url.split('http');
+            html += '<td>';
             for (u in urls){
                 if ( ['', undefined].indexOf(urls[u])==-1){
                     if(urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()== 'csv'){

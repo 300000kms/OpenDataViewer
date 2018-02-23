@@ -196,6 +196,7 @@ angular.module('raw.controllers', [])
       }, function(response) { //si es un archivo
           
           $http.get($sce.trustAsResourceUrl(url), {responseType:'arraybuffer'})
+          //$http.get(url, {responseType:'arraybuffer'})
           .then(function(response) {
             var data = new Uint8Array(response.data);
             var arr = new Array();
@@ -233,15 +234,15 @@ angular.module('raw.controllers', [])
                 //console.log(bstr)
                 //$scope.fileName = url;
                 try {
-                    console.log(1.1)
+                    //console.log(1.1)
                     var json = JSON.parse(bstr);
                     selectArray(json);
-                    console.log(1.2)
+                    //console.log(1.2)
                 }
                 catch(error){
-                    console.log(2.1)
+                    //console.log(2.1)
                     parseText(bstr);
-                    console.log(2.2)
+                    //console.log(2.2)
                 }
             }
         },
