@@ -91,7 +91,7 @@ function doTable(data){
         html += '<td>'+res[r].year+'</td>'
         html += '<td>'+res[r].publication+'</td>'
         
-        if (res[r].url != undefined){
+        if (res[r].url != undefined  && typeof(res[r].url) == 'string'){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
@@ -104,7 +104,7 @@ function doTable(data){
             html += '</td>'
         }else{html+='<td></td>'}
         
-        if (res[r].url != undefined){
+        if (res[r].url != undefined  && typeof(res[r].url) == 'string'){
             urls =res[r].url.split('http')
             html += '<td>'
             for (u in urls){
