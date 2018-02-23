@@ -10,55 +10,51 @@ angular.module('raw.controllers', [])
 
     // Clipboard
     $scope.$watch('clipboardText', function (text) {
-      if (!text) return;
+        if (!text) return;
 
-      $scope.loading = true;
+        $scope.loading = true;
 
-      if (is.url(text)) {
+        if (is.url(text)) {
         $scope.importMode = 'url';
         $timeout(function() { $scope.url = text; });
         return;
-      }
+        }
 
-      try {
+        try {
         var json = JSON.parse(text);
         selectArray(json);
         $scope.loading = false;
-      }
-      catch(error) {
+        }
+        catch(error) {
         parseText(text);
-      }
-
+        }
     });
 
     $scope.antani = function(d){
-      $scope.loading = true;
-      var json = dataService.flatJSON(d);
-      parseText(d3.tsv.format(json))
+        $scope.loading = true;
+        var json = dataService.flatJSON(d);
+        parseText(d3.tsv.format(json))
     }
 
     // select Array in JSON
     function selectArray(json){
-      $scope.json = json;
-      $scope.structure = [];
-      expand(json);
+        $scope.json = json;
+        $scope.structure = [];
+        expand(json);
     }
 
     // parse Text
     function parseText(text){
-    //  $scope.loading = false;
-      $scope.json = null;
-      $scope.text = text;
-      $scope.parse(text);
+        //  $scope.loading = false;
+        $scope.json = null;
+        $scope.text = text;
+        $scope.parse(text);
     }
 
     // load File
     $scope.uploadFile = function (file) {
-
       if (file.size) {
-
         $scope.loading = true;
-
         // excel
         if (file.name.search(/\.xls|\.xlsx/) != -1 || file.type.search('sheet') != -1) {
           dataService.loadExcel(file)
@@ -100,7 +96,6 @@ angular.module('raw.controllers', [])
 
       $scope.loading = false;
     //  $scope.parsed = true;
-
       if (!json) return;
       try {
         selectArray(json);
@@ -176,42 +171,32 @@ angular.module('raw.controllers', [])
                 parseText(bstr);
               }
             }
-
-          },
+        },
           function(response){
             $scope.loading = false;
             $scope.error = "Something wrong with the URL you provided. Please be sure it is the correct address.";
           }
         )
-
       });
-
     });
 
     // load hash
+    //https://crossorigin.me/http://opendata-ajuntament.barcelona.cat/resources/bsm/TARIFES.CSV
     $scope.$watch('hash', function (url) {
-
       if(!url || !url.length) {
         return;
       }
-        /*
-      if (is.not.url(url)) {
-        $scope.error = "Please insert a valid URL";
-        return;
-      }
-*/
       $scope.loading = true;
       var error = null;
       // first trying jsonp
       $http.jsonp($sce.trustAsResourceUrl(url), {jsonpCallbackParam: 'callback'})
-          .then(function(response) {
+          .then(function(response) { //si es un json
             $scope.fileName = url;
             parseData(response.data);
-      }, function(response) {
-
+      }, function(response) { //si es un archivo
+          
           $http.get($sce.trustAsResourceUrl(url), {responseType:'arraybuffer'})
           .then(function(response) {
-
             var data = new Uint8Array(response.data);
             var arr = new Array();
             for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
@@ -243,40 +228,44 @@ angular.module('raw.controllers', [])
               }
             }
             catch(error) {
-              $scope.fileName = url;
-              try {
-                var json = JSON.parse(bstr);
-                selectArray(json);
-              }
-              catch(error) {
-                parseText(bstr);
-              }
+                //console.log(11111111111111111111111111111111)
+                //console.log(url)
+                //console.log(bstr)
+                //$scope.fileName = url;
+                try {
+                    console.log(1.1)
+                    var json = JSON.parse(bstr);
+                    selectArray(json);
+                    console.log(1.2)
+                }
+                catch(error){
+                    console.log(2.1)
+                    parseText(bstr);
+                    console.log(2.2)
+                }
             }
-
-          },
+        },
           function(response){
             $scope.loading = false;
             $scope.error = "Something wrong with the URL you provided. Please be sure it is the correct address.";
           }
         )
-
       });
-
     });
     
     
     //load samples
     $scope.samples = [
-      { title : 'Biggest cities per continent', type : 'Distributions', url : 'data/cities.csv'},
-      { title : 'Countries GDP', type : 'Other', url : 'data/countriesGDP.csv'},
-      { title : 'Cars', type : 'Multivariate', url : 'data/multivariate.csv' },
-      { title : 'Movies', type : 'Dispersions', url : 'data/dispersions.csv' },
-      { title : 'Music industry', type: 'Time Series', url : 'data/music.csv' },
-      { title : 'Lineup', type : 'Time chunks', url : 'data/lineup.tsv' },
-      { title : 'Orchestras', type : 'Hierarchies (weighted)', url : 'data/orchestra.csv' },
-      { title : 'Animal kingdom', type: 'Hierarchies', url : 'data/animals.tsv' },
-      { title : 'Titanic\'s passengers', type : 'Multi categorical', url : 'data/titanic.tsv' },
-      { title : 'Most frequent letters', type: 'Matrix (narrow)', url:'data/letters.tsv'}
+        { title : 'Biggest cities per continent', type : 'Distributions', url : 'data/cities.csv'},
+        { title : 'Countries GDP', type : 'Other', url : 'data/countriesGDP.csv'},
+        { title : 'Cars', type : 'Multivariate', url : 'data/multivariate.csv' },
+        { title : 'Movies', type : 'Dispersions', url : 'data/dispersions.csv' },
+        { title : 'Music industry', type: 'Time Series', url : 'data/music.csv' },
+        { title : 'Lineup', type : 'Time chunks', url : 'data/lineup.tsv' },
+        { title : 'Orchestras', type : 'Hierarchies (weighted)', url : 'data/orchestra.csv' },
+        { title : 'Animal kingdom', type: 'Hierarchies', url : 'data/animals.tsv' },
+        { title : 'Titanic\'s passengers', type : 'Multi categorical', url : 'data/titanic.tsv' },
+        { title : 'Most frequent letters', type: 'Matrix (narrow)', url:'data/letters.tsv'}
     ]
 
     $scope.selectSample = function(sample) {
@@ -459,24 +448,30 @@ angular.module('raw.controllers', [])
       //$scope.$apply();
 
       if (!text) return;
-
+        console.log('parsing')
       try {
         var parser = raw.parser();
+          
         $scope.data = parser(text);
+        //errrorr
+          console.log(text)
         $scope.metadata = parser.metadata(text);
+          
         $scope.error = false;
         pivotable($scope.data);
         $scope.parsed = true;
-
+          
         $timeout(function() {
           $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })
           $scope.chart = $scope.charts.filter(function(d){return d.title() == 'Scatter Plot'})[0];
           $scope.model = $scope.chart ? $scope.chart.model() : null;
         });
       } catch(e){
+          
         $scope.data = [];
         $scope.metadata = [];
         $scope.error = e.name == "ParseError" ? +e.message : false;
+        //console.log(e.name, e.message);
       }
       if (!$scope.data.length && $scope.model) $scope.model.clear();
       $scope.loading = false;

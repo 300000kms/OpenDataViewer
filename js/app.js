@@ -4,6 +4,8 @@
 //var urlcsv = 'http://opendata-ajuntament.barcelona.cat/data/cataleg.csv?public=true'
 //var csv ='data/data.csv'
 
+cors = 'https://crossorigin.me/';
+cors = 'raw/get.cgi?url=';
 
 function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?callback=jQuery112006745389475568797_1510911664869&_=1510911664870
@@ -109,7 +111,10 @@ function doTable(data){
             html += '<td>'
             for (u in urls){
                 if ( ['', undefined].indexOf(urls[u])==-1){
-                    if(urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()== 'csv'){html += '<i class="far fa-chart-bar"></i>'}
+                    if(urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()== 'csv'){
+                        link = "raw/index.html#"+cors+'http'+urls[u]
+                        html += '<a href="'+link+'"><i class="far fa-chart-bar"></i></a>'
+                    }
                 }
             }
             html += '</td>'
@@ -129,8 +134,8 @@ function doTable(data){
         bInfo: false,
         bAutoWidth: true,
         //scrollY: $("body").height()-150,
-        pageLength: 50,
-        paging: true,
+        //pageLength: 50,
+        paging: false,
         "deferRender": true,
         "searching": true,
         rowGroup: { dataSrc: 1 },
