@@ -17,8 +17,6 @@ https://www.getrevue.co/profile/TGIC/issues/6-super-useful-open-data-portals-pla
 
 
 https://stackoverflow.com/questions/17416274/ajax-get-size-of-file-before-downloading
-
-
 */
 cors = 'https://crossorigin.me/';
 cors = 'raw/get.cgi?url=';
@@ -40,6 +38,7 @@ function getData(urljson){
             var xhr = $.ajaxSettings.xhr();
             xhr.onprogress = function e() {
                 // For downloads
+                console.log(e);
                 if (e.lengthComputable) {
                     console.log(e.loaded / e.total);
                 }
