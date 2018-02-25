@@ -1,25 +1,61 @@
+/*
+- progress bar     //https://coderwall.com/p/je3uww/get-progress-of-an-ajax-request
+- otros portales (london, amsterdam)
+- reducir peso de renderizado
+- query mas inteligente reduciendo pasos (existe alguna opcion...)
+*/
 
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search';
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?rows=150'
 //var urlcsv = 'http://opendata-ajuntament.barcelona.cat/data/cataleg.csv?public=true'
 //var csv ='data/data.csv'
+/*
+barcelona has a od portal with x datasets that have been downloaded x times since date
+classified in x groups, the last has been updated x days ago, with x different formats
 
+https://www.getrevue.co/profile/TGIC/issues/6-super-useful-open-data-portals-platforms-56202
+
+
+https://stackoverflow.com/questions/17416274/ajax-get-size-of-file-before-downloading
+
+
+*/
 cors = 'https://crossorigin.me/';
 cors = 'raw/get.cgi?url=';
+cors = 'http://www.atnight.ws/od/raw/get.cgi?url=';
 
 function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?callback=jQuery112006745389475568797_1510911664869&_=1510911664870
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=trams&callback=lamevafuncio
+    //https://coderwall.com/p/je3uww/get-progress-of-an-ajax-request
     $.ajax({
-        url: urljson,
+        url: urljson.url,
         type: 'GET',
         cache:true,
         //jsonp:'$callback',
         dataType: "jsonp",
         jsonpCallback:'parseData',
         error: function (x, t, r) { console.log(x,t,r); },
-        success: function( data ) {
-            doTable(data)
+        xhr: function () {
+            var xhr = $.ajaxSettings.xhr();
+            xhr.onprogress = function e() {
+                // For downloads
+                if (e.lengthComputable) {
+                    console.log(e.loaded / e.total);
+                }
+            };  
+            xhr.upload.onprogress = function (e) {
+                // For uploads
+                if (e.lengthComputable) {
+                    console.log(e.loaded / e.total);
+                }
+        };
+        return xhr;
+        },
+        success: function(data){
+            stats = doTable(data)
+            stats['name'] = urljson.name;
+            conf(stats)
         }
     }); 
 }
@@ -48,7 +84,7 @@ function doTable(data){
     html += '<th>notes</th>'
     html += '<th>description</th>'
     html += '<th>downloads</th>'
-    html += '<th>year</th>'
+    html += '<th>file</th>'
     html += '<th>publication</th>'
     html += '<th>link</th>'
     html += '<th>view</th>'
@@ -56,6 +92,7 @@ function doTable(data){
     html += '</tr></thead>'
     
     dic = []
+    ndatasources = da.length;
     for(d in da){
         for (r in da[d].resources){
             year = da[d].resources[r].name.split('.')[0];
@@ -80,6 +117,8 @@ function doTable(data){
     
     var res = alasql('SELECT i, title, author, department, notes, descr, year, publication, SUM(url) as url, SUM(CAST(downs AS NUMBER)) as downs FROM ? GROUP BY i, title, author, department, notes, descr, year, publication',[dic]);       
     
+    //var res = alasql('SELECT i, title, author, department, notes, descr, year, MAX(publication), SUM(url) as url, SUM(CAST(downs AS NUMBER)) as downs FROM ? GROUP BY i, title, author, department, notes, descr, year',[dic]);       
+    
     html+='<tbody>'
     for(r in res){
         html += '<tr>'
@@ -89,9 +128,9 @@ function doTable(data){
         html += '<td><div class="cell">'+res[r].department+'</div></td>'
         html += '<td><div class="cell">'+res[r].notes+'</div></td>'
         html += '<td><div class="cell">'+res[r].descr+'</div></td>'
-        html += '<td>'+res[r].downs+'</td>'
-        html += '<td>'+res[r].year+'</td>'
-        html += '<td>'+res[r].publication+'</td>'
+        html += '<td><div class="cell">'+res[r].downs+'</div></td>'
+        html += '<td><div class="cell2">'+res[r].year+'</div></td>'
+        html += '<td><div class="cell">'+res[r].publication+'</div></td>'
         
         if (res[r].url != undefined  && typeof(res[r].url) == 'string'){
             urls =res[r].url.split('http')
@@ -125,8 +164,8 @@ function doTable(data){
     html += '</tbody>'
     html += '</table>'
     
+    $('.tab').append(html);
     
-    $('.tab').append(html)
     $('#tab').DataTable({
         bFilter: false,
         bPaginate: false,
@@ -140,7 +179,7 @@ function doTable(data){
         "searching": true,
         rowGroup: { dataSrc: 1 },
         responsive: {
-            details: true
+            details: true,
         },
         //columns: [null, null, null, null, null, null, {width: "100%" }]
     });
@@ -154,10 +193,21 @@ function doTable(data){
             scrollTop: $('#tab_filter input').offset().top
         }, 200);
     });
-
     
     popups()
     spinOff()
+    
+    //resum
+    var res2 = alasql('SELECT COUNT(i), SUM( DISTINCT author ) as aa,COUNT( DISTINCT author ), SUM(DISTINCT department) dd, notes, descr, year, publication, SUM(url) as url, SUM(CAST(downs AS NUMBER)) as downs FROM ?',[dic])[0]; 
+    //console.log(res2)
+    
+    stats={}
+    stats.ndatasources = ndatasources;
+    stats.authors = res2.aa;
+    stats.departments = res2.dd;
+    stats.downloads = res2.downs;
+    
+    return stats
 }
 
 function popups(){
@@ -177,8 +227,20 @@ function noscroll() {
 }
 
 function conf(data){
-    $('body').append('<div id="main"><div id="city"></div></div>');
-    $('#city').html(data.name)
+    //console.log(data)
+    //http://api.jquery.com/before/
+    //$('body').append('<div id="main"><div id="city"></div></div>');
+    html = ''
+    html += 'the open data portal from '
+    html += data.name
+    html += ' has '
+    html += data.ndatasources
+    html += ' datasources with '
+    html += data.downloads 
+    html += ' downloads '
+    html += ''
+    
+    $('#city').html(html)
 }
 
 function spinOn(){
@@ -191,7 +253,6 @@ function spinOff(){
     $('#spin').remove();
     window.removeEventListener('scroll', noscroll);
 }
-
 
 function placeholder(dic){
     n = null;
@@ -213,15 +274,12 @@ function placeholder(dic){
 }
 
 
-
 $(document).ready(function () {
     spinOn()
     city = location.hash;
     if(city==''){city = 'barcelona'}else{city=city.replace('#','')}
     //console.log(city)
     $.getJSON( "cities/"+city+".json", function( data ) {
-        //console.log(data)
-        getData(data.url)
-        conf(data)
+        getData(data);
     })
 })

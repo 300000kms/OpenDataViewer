@@ -194,7 +194,8 @@ angular.module('raw.controllers', [])
             $scope.fileName = url;
             parseData(response.data);
       }, function(response) { //si es un archivo
-          
+          url = url.split('%2F').join('/').split('%3F').join('?')
+          console.log(url);
           $http.get($sce.trustAsResourceUrl(url), {responseType:'arraybuffer'})
           //$http.get(url, {responseType:'arraybuffer'})
           .then(function(response) {
@@ -449,13 +450,12 @@ angular.module('raw.controllers', [])
       //$scope.$apply();
 
       if (!text) return;
-        console.log('parsing')
+      console.log('parsing')
       try {
         var parser = raw.parser();
-          
+        console.log(456);
         $scope.data = parser(text);
-        //errrorr
-          console.log(text)
+        console.log(458);
         $scope.metadata = parser.metadata(text);
           
         $scope.error = false;

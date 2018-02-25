@@ -78,6 +78,16 @@ input::placeholder{
     line-height: 1.2em;
 }
 
+.cell2{
+    display: block; /* or inline-block */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-height: 2.4em;
+    line-height: 1.2em;
+}
+
+
+
 #spin{
     position: absolute;
     height: 100%;
