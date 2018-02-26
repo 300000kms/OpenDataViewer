@@ -3,24 +3,29 @@
 - otros portales (london, amsterdam)
 - reducir peso de renderizado
 - query mas inteligente reduciendo pasos (existe alguna opcion...)
+- cgi load csv
+
+
+https://stackoverflow.com/questions/39874012/get-progress-of-ajax-call-to-get-json-in-rails
+
 */
 
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search';
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?rows=150'
 //var urlcsv = 'http://opendata-ajuntament.barcelona.cat/data/cataleg.csv?public=true'
 //var csv ='data/data.csv'
+
 /*
 barcelona has a od portal with x datasets that have been downloaded x times since date
 classified in x groups, the last has been updated x days ago, with x different formats
 
 https://www.getrevue.co/profile/TGIC/issues/6-super-useful-open-data-portals-platforms-56202
-
-
 https://stackoverflow.com/questions/17416274/ajax-get-size-of-file-before-downloading
 */
+
 cors = 'https://crossorigin.me/';
 cors = 'raw/get.cgi?url=';
-cors = 'http://www.atnight.ws/od/raw/get.cgi?url=';
+cors = 'http://www.atnight.ws/od/raw/getcsv.cgi?url=';
 
 function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?callback=jQuery112006745389475568797_1510911664869&_=1510911664870
@@ -193,7 +198,7 @@ function doTable(data){
         }, 200);
     });
     
-    popups()
+    //popups()
     spinOff()
     
     //resum

@@ -204,6 +204,11 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
     font-weight: 900;
 }
 
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+    background-color: #0c0c0c;
+    color: white;
+}
+
 
 .dataTables_wrapper .dataTables_paginate {
     float: right;

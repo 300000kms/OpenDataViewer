@@ -7,11 +7,10 @@ import urllib2
 print "content-type: text/csv"
 print "access-control-allow-origin: *"
 
-arg = cgi.FieldStorage()
-url = arg['url'].value
+#arg = cgi.FieldStorage()
+#url = arg['url'].value
 
-#url = 'http://opendata-ajuntament.barcelona.cat/resources/sedac/Plans_Especials_359.csv'
-#url = 'http://opendata-ajuntament.barcelona.cat/resources/bsm/HORARIS.CSV'
+url = 'http://opendata-ajuntament.barcelona.cat/resources/sedac/Plans_Especials_359.csv'
 req = urllib2.Request(url)
 u = urllib2.urlopen(req)
 data = u.read()
