@@ -33,31 +33,23 @@ function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=trams&callback=lamevafuncio
     //https://coderwall.com/p/je3uww/get-progress-of-an-ajax-request
     $.ajax({
-        url: urljson.url,
+        url: 'http://www.atnight.ws/od/get.cgi?url='+urljson.url,  //'http://www.atnight.ws/od/get.cgi?url='
         type: 'GET',
         cache:true,
         //jsonp:'$callback',
-        dataType: "jsonp",
-        jsonpCallback:'parseData',
-        error: function (x, t, r) { console.log(x,t,r); },
+        dataType: "json",
+        jsonpCallback:'parseData',//
+        //error: function (x, t, r) { console.log(x,t,r); },
         xhr: function () {
             var xhr = $.ajaxSettings.xhr();
-            xhr.onprogress = function e() {
-                // For downloads
-                console.log(e);
-                if (e.lengthComputable) {
-                    console.log(e.loaded / e.total);
-                }
-            };  
-            xhr.upload.onprogress = function (e) {
-                // For uploads
-                if (e.lengthComputable) {
-                    console.log(e.loaded / e.total);
-                }
-        };
-        return xhr;
+            xhr.onprogress = function (e) {
+                $('#loading').html(parseInt(e.loaded/1000) +' bytes');
+            };
+            return xhr;
         },
         success: function(data){
+            console.log(data)
+            $('#loading').fadeOut();
             stats = doTable(data)
             stats['name'] = urljson.name;
             conf(stats)
@@ -76,17 +68,21 @@ function format(c, v){return v}
 
 function openRaw(el){
     url = $(el).attr('href')
-    console.log(url)
     $('#rawcontent').attr('data', url)
     $('#raw').css('display', 'block')
     $('body').css('overflow', 'hidden')
-    
 }
 
+function closeRaw(){
+    $('#rawcontent').attr('data', '')
+    $('#raw').css('display', 'none')
+    $('body').css('overflow', '')
+}
 
 function doTable(data){    
-    da = data.result.results
-    
+    if (data.result.results == undefined){da = data.result.result}
+    else{da = data.result.results}
+
     html = '';
     $('body').append('<div class="tab"></div>');
     
@@ -96,7 +92,7 @@ function doTable(data){
     html += '<th>id</th>'
     html += '<th>title</th>'
     html += '<th>author</th>'
-    html += '<th>depatment</th>'
+    html += '<th>department</th>'
     html += '<th>notes</th>'
     html += '<th>description</th>'
     html += '<th>downloads</th>'
@@ -111,18 +107,28 @@ function doTable(data){
     ndatasources = da.length;
     for(d in da){
         for (r in da[d].resources){
-            year = da[d].resources[r].name.split('.')[0];
+            //console.log(da[d])
+            try{
+                year = da[d].resources[r].name.split('.')[0];
+            }catch(err){
+                year = '';
+            }
+            
             publication = da[d].resources[r].created.split("T")[0]
             downs = da[d].resources[r].downloads_absolute;
             if (downs=='None'){downs=''}
-            
-            dict={}
-            dict['i']=d
-            dict['title']=da[d]['title']
-            dict['author']=da[d]['author']
-            dict['department']=da[d]['department']
-            dict['notes']=da[d]['notes']
-            dict['descr']=da[d].organization.description_translated.en
+            dict={};
+            dict['i']=d;
+            dict['title']=da[d]['title'];
+            dict['author']=da[d]['author'];
+            dict['department']=da[d]['department'];
+            dict['notes']=da[d]['notes'].replace(/<[^>]*>/g, '');
+            try {
+                dict['descr']=da[d].organization.description_translated.en
+            }
+            catch(err) {
+                dict['descr']=da[d].organization.title
+            }
             dict['year']=year
             dict['publication']=publication
             dict['url']=da[d].resources[r].url
@@ -164,14 +170,20 @@ function doTable(data){
         if (res[r].url != undefined  && typeof(res[r].url) == 'string'){
             urls =res[r].url.split('http');
             html += '<td>';
+            links =''
             for (u in urls){
-                if ( ['', undefined].indexOf(urls[u])==-1){
+                if ( ['', undefined].indexOf(urls[u]) == -1){
                     if(urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()== 'csv'){
                         link = "raw/index.html#"+cors+'http'+urls[u]
-                        html += '<div class="click" href="'+link+'" onclick="openRaw(this)"><i class="far fa-chart-bar"></i></div>'
+                        links += '<div class="click" href="'+link+'" onclick="openRaw(this)"><i class="far fa-chart-bar"></i></div>'
                     }
                 }
-            }
+            };
+            if (links.length == 0){
+                html += '<div class="noclick"><i class="far fa-chart-bar"></i></div>';
+            }else{
+                html += links;
+            };
             html += '</td>'
         }else{html+='<td></td>'}
         
@@ -189,8 +201,8 @@ function doTable(data){
         bInfo: false,
         bAutoWidth: true,
         //scrollY: $("body").height()-150,
-        //pageLength: 50,
-        paging: false,
+        pageLength: 50,
+        paging: true,
         "deferRender": true,
         "searching": true,
         rowGroup: { dataSrc: 1 },
@@ -298,5 +310,6 @@ $(document).ready(function () {
     $.getJSON( "cities/"+city+".json", function( data ) {
         getData(data);
     })
+    
     
 })
