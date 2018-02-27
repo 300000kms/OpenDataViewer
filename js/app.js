@@ -10,6 +10,7 @@ https://stackoverflow.com/questions/39874012/get-progress-of-ajax-call-to-get-js
 
 */
 
+
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search';
 //var urljson ='http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?rows=150'
 //var urlcsv = 'http://opendata-ajuntament.barcelona.cat/data/cataleg.csv?public=true'
