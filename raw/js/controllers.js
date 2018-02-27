@@ -230,20 +230,16 @@ angular.module('raw.controllers', [])
               }
             }
             catch(error) {
-                //console.log(11111111111111111111111111111111)
-                //console.log(url)
-                //console.log(bstr)
-                //$scope.fileName = url;
                 try {
-                    //console.log(1.1)
+                    console.log(1.1)
                     var json = JSON.parse(bstr);
                     selectArray(json);
-                    //console.log(1.2)
+                    console.log(1.2)
                 }
                 catch(error){
-                    //console.log(2.1)
+                    console.log(2.1)
                     parseText(bstr);
-                    //console.log(2.2)
+                    console.log(2.2)
                 }
             }
         },
@@ -344,7 +340,6 @@ angular.module('raw.controllers', [])
       //$scope.$apply();
     })
 
-    //cargar el hash?
     
 
     var arrays = [];
@@ -450,14 +445,10 @@ angular.module('raw.controllers', [])
       //$scope.$apply();
 
       if (!text) return;
-      console.log('parsing')
       try {
         var parser = raw.parser();
-        console.log(456);
         $scope.data = parser(text);
-        console.log(458);
         $scope.metadata = parser.metadata(text);
-          
         $scope.error = false;
         pivotable($scope.data);
         $scope.parsed = true;

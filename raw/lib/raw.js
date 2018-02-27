@@ -36,11 +36,14 @@
     // Insiperd by Ben Nadel's algorithm
     // http://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
     function parser(string) {
-      if (!string || string.length === 0) return [];
 
+        
+      if (!string || string.length === 0) return [];
+        
       var delimiter = parser.delimiter || detectDelimiter(string),
           rows = [[]],
-          match, matches,
+          match, 
+          matches,
           data = [],
           re = new RegExp((
               "(\\" + delimiter + "|\\r?\\n|\\r|^)" +
@@ -49,20 +52,29 @@
             ),"gi"
           );
 
+      string = string.replace('ï»¿', '');
+       //console.log(string);
+
       while (matches = re.exec(string)){
         match = matches[2] ? matches[2].replace(new RegExp( "\"\"", "g" ), "\"" ) : matches[3];
         if (matches[1].length && matches[1] != delimiter ) rows.push([]);
         rows[rows.length - 1].push( match );
-      }
+      };
+        
+        var header = rows[0];
+        var header2 = [];
+        
+    for (var i=0; i<header.length; i++){
+        header2.push(header[i].split('.').join('_'));
+    }
 
-      var header = rows[0];
 
       for (var i=1; i<rows.length; i++) {
         if (rows[i].length == 1 && rows[i][0].length == 0 && rows[i].length != header.length) continue;
         if(rows[i].length == header.length) {
           var obj = {};
           for (var h in header){
-            obj[header[h]] = rows[i][h];
+            obj[header2[h]] = rows[i][h];
           }
           data.push(obj);
         } else {
@@ -92,9 +104,9 @@
       var keys = {};
       d3.keys(objs[0]).forEach(function (d){ keys[d] = []; });
       objs.forEach(function(d){
-        for(var key in keys) {
-          var type = raw.typeOf(d[key]);
-          if (type) keys[key].push(type);
+        for(var key in keys){
+            var type = raw.typeOf(d[key]);
+            if (type) keys[key].push(type);
         }
       })
       return keys;
@@ -143,6 +155,7 @@
       this.name = "ParseError";
       this.message = message || "Sorry something went wrong while parsing your data.";
     }
+      
     ParseError.prototype = new Error();
     ParseError.prototype.constructor = ParseError;
 
@@ -814,7 +827,8 @@
   }
 
   raw.typeOf = function (value) {
-    if (value === null || value.length === 0) return null;
+    if (value === undefined) return null;
+    if (value === null) {return null};
     if (raw.isDate(value)) return Date.name;
     if (raw.isNumber(value)) return Number.name;
     if (raw.isString(value)) return String.name;

@@ -15,6 +15,23 @@ body{
     /*background: rgba(0,0,0,0.1)*/
 }
 
+#raw{
+    position: fixed;
+    z-index: 999;
+    height: calc(100% - 40px);
+    width: calc(100% - 40px);
+    top:0px;
+    left:0px;
+    display: none;
+    border:20px solid rgb(64,64,64);
+    
+}
+
+#rawcontent{
+    height:100%;
+    width:100%;
+}
+
 #main{
     height:50%;
     width:auto;
@@ -28,7 +45,8 @@ body{
 .tab{
     /*height:100%;*/
     width:auto;
-    margin: 20px; margin-bottom: 50px;
+    margin: 20px; 
+    /*margin-bottom: 50px;*/
 }
 
 #tab_filter{
@@ -40,7 +58,9 @@ body{
     float:left;
     text-align: left:
 }
-
+.click{
+    cursor: pointer;
+}
 #tab_filter input{
     font-size: 40px;
     font-weight: 900;
@@ -216,6 +236,26 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
     padding-top: 20px;
 }
 
+
+table.dataTable>tbody>tr.child:hover {
+    background: rgb(0,0,0) !important;
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.dtr-data{
+    display: inline-block;
+}
+
+.dtr-title{
+    vertical-align: top;
+}
 /*-------------------------*/
 
 .spinner {

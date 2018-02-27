@@ -73,6 +73,17 @@ function parseData(data){
 
 function format(c, v){return v}
 
+
+function openRaw(el){
+    url = $(el).attr('href')
+    console.log(url)
+    $('#rawcontent').attr('data', url)
+    $('#raw').css('display', 'block')
+    $('body').css('overflow', 'hidden')
+    
+}
+
+
 function doTable(data){    
     da = data.result.results
     
@@ -157,7 +168,7 @@ function doTable(data){
                 if ( ['', undefined].indexOf(urls[u])==-1){
                     if(urls[u].split('.')[urls[u].split('.').length-1].toLowerCase()== 'csv'){
                         link = "raw/index.html#"+cors+'http'+urls[u]
-                        html += '<a href="'+link+'"><i class="far fa-chart-bar"></i></a>'
+                        html += '<div class="click" href="'+link+'" onclick="openRaw(this)"><i class="far fa-chart-bar"></i></div>'
                     }
                 }
             }
@@ -287,4 +298,5 @@ $(document).ready(function () {
     $.getJSON( "cities/"+city+".json", function( data ) {
         getData(data);
     })
+    
 })
