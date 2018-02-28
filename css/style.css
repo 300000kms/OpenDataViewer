@@ -13,6 +13,7 @@ body{
     font-size: 12px;
     overflow-x: hidden;
     /*background: rgba(0,0,0,0.1)*/
+    background: red;
 }
 
 #raw{
@@ -103,7 +104,7 @@ body{
 }
 
 input::placeholder{
-    color:darkgray;
+    color:rgba(0,0,0,0.3);
 }
 
 
@@ -117,6 +118,8 @@ input::placeholder{
 
 #tab_filter input{
     width:100%;
+    background: transparent;
+    border: 1px solid black;
 }
 
 #tab{

@@ -57,6 +57,29 @@ function getData(urljson){
     }); 
 }
 
+function getDataFromUrl(url, city){
+    $.ajax({
+        url: 'http://www.atnight.ws/od/get.cgi?url='+url,  //'http://www.atnight.ws/od/get.cgi?url='
+        type: 'GET',
+        cache:true,
+        dataType: "json",
+        jsonpCallback:'parseData',//
+        xhr: function () {
+            var xhr = $.ajaxSettings.xhr();
+            xhr.onprogress = function (e) {
+                $('#loading').html(parseInt(e.loaded/1000) +' bytes');
+            };
+            return xhr;
+        },
+        success: function(data){
+            console.log(data)
+            $('#loading').fadeOut();
+            stats = doTable(data)
+            stats['name'] = city;
+            conf(stats)
+        }
+    }); 
+}
 
 function parseData(data){
     //console.log(data)
@@ -238,6 +261,7 @@ function doTable(data){
     return stats
 }
 
+
 function popups(){
     $('body').append('<div id="popup"></div>');
     $('.cell').hover(function(event){
@@ -250,9 +274,11 @@ function popups(){
     })
 }
 
+
 function noscroll() {
   window.scrollTo( 0, 0 );
 }
+
 
 function conf(data){
     //console.log(data)
@@ -271,18 +297,22 @@ function conf(data){
     $('#city').html(html)
 }
 
+
 function spinOn(){
     $('body').append('<div id="spin"><div class="spinner"></div></div>');
     //anular scroll
     window.addEventListener('scroll', noscroll);
 }
 
+
 function spinOff(){
     $('#spin').remove();
     window.removeEventListener('scroll', noscroll);
 }
 
+
 function placeholder(dic){
+    return
     n = null;
     c = 0;
     setInterval(function(){
@@ -302,14 +332,35 @@ function placeholder(dic){
 }
 
 
+window.colors= ['magenta', 'cyan', 'yellow','red', 'blue', ];
+function colorize(labels, colors, p, property){
+    if(animate){
+        setInterval(function(){
+            le = $(labels[0]).length
+            r = parseInt(Math.random()*le);
+            color = colors[parseInt(Math.random()*colors.length)]
+            for(l in labels){
+                $(labels[l]).eq(r).css(property, color)
+            } 
+        }, p);
+    } 
+}
+
 $(document).ready(function () {
     spinOn()
-    city = location.hash;
-    if(city==''){city = 'barcelona'}else{city=city.replace('#','')}
-    //console.log(city)
-    $.getJSON( "cities/"+city+".json", function( data ) {
-        getData(data);
-    })
+    var url_string = window.location; //window.location.href
+    var url = new URL(url_string);
+    var cityUrl = url.searchParams.get("url");
+    city = url.searchParams.get("city");
     
+//    if(city==''){city = 'barcelona'}else{city=city.replace('#','')}
+//    $.getJSON( "cities/"+city+".json", function( data ) {
+//        getData(data);
+//    })
+    
+    getDataFromUrl(cityUrl, city);
+    animate= false;
+     colorize(['body'], colors, 200, 'background')
+
     
 })
