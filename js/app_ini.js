@@ -6,6 +6,7 @@ function doMap(){
         center: [41, 0],
         zoom: 3,
         minZoom:3,
+        zoomControl:false
     });
     
     var Esri_WorldTerrain = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
@@ -36,29 +37,33 @@ function doMap(){
 }
 
 
-window.colors= ['magenta', 'cyan', 'yellow','red', 'blue', ];
+window.colors= ['pink', 'cyan', 'yellow','red','lime',  ];
 function colorize(labels, colors, p, property){
-    if(animate){
+    
         setInterval(function(){
-            le = $(labels[0]).length
-            r = parseInt(Math.random()*le);
-            color = colors[parseInt(Math.random()*colors.length)]
-            for(l in labels){
-                $(labels[l]).eq(r).css(property, color)
-            } 
+            if(animate){
+                le = $(labels[0]).length
+                r = parseInt(Math.random()*le);
+                color = colors[parseInt(Math.random()*colors.length)]
+                for(l in labels){
+                    $(labels[l]).eq(r).css(property, color)
+                }
+            }
         }, p);
-    } 
+    
 }
 
 
 function mapColorize(){
-    if (animate){
+    
         setInterval(function(){
-            degrees= Math.random()*360;
-            filter = 'contrast(3) hue-rotate('+degrees+'deg) saturate(5)';
-            $('img.leaflet-tile.leaflet-tile-loaded').css('filter', filter);
+            if (animate){
+                degrees= Math.random()*360;
+                filter = 'contrast(3) hue-rotate('+degrees+'deg) saturate(5)';
+                $('img.leaflet-tile.leaflet-tile-loaded').css('filter', filter);
+            }
         },1000)  
-    }  
+    
 }
 
 
@@ -73,6 +78,7 @@ function loadMarkers(){
     header: true,
     //step: function(row) {},
 	complete: function(results) {
+        
         var myIcon  = L.divIcon({className: 'my-div-icon'});
         
         var LeafIcon = new L.Icon({
@@ -83,44 +89,43 @@ function loadMarkers(){
             }
         );
         
-        var myIconStar  = L.divIcon({className: 'star-five'});
+        var myIconStar  = L.divIcon({
+            className: 'star-five',
+        });
         
-		var markers = L.markerClusterGroup({showCoverageOnHover:false,});
+		var markers = L.markerClusterGroup({showCoverageOnHover:false});
+        
         map.addLayer(markers);
         
         re = results['data'];
         
-        
-         for(r in re){
-            
+        for(r in re){
             if(re[r]['location']){
-                //console.log(re[r])
-                marker = L.marker(re[r]['location'].split(','), {icon: myIcon, title: 'title'} );
-                marker.bindPopup(re[r].name+'<br>'+re[r].country);
+                marker = L.marker(re[r]['location'].split(','), {
+                    icon: L.divIcon({className: 'my-div-icon',
+                                       html: '<div class="ciutat">'+re[r].name+'</div>'
+                                     }), 
+                    title: re[r].name,
+                });
+                marker.bindPopup('<a target="_blank" href="'+re[r].url+'">visit: <br>'+re[r].name+'<br>'+re[r].country+'</a>');
                 markers.addLayer(marker);
             };
-
             
             if (re[r]['url_api']!='' && re[r]['location']){
-                marker = L.marker(re[r]['location'].split(','), {icon: LeafIcon, title: 'title'} );
+                marker = L.marker(re[r]['location'].split(','), {icon: LeafIcon, title: re[r].name, opacity:0.8,} );
                 url = 'data.html?city='+re[r].name+'&url='+re[r].url_api
-                marker.bindPopup('<a href="'+url+'">GO! '+re[r].name+'</a>');
+                marker.bindPopup('<a href="'+url+'">'+re[r].name+'<br>BROWSE!</a>');
                 map.addLayer(marker)
             };
-        }
-        
-       
-        
-        
-        
-        
+        };
+
         colorize(['.marker-cluster div'], window.colors, 2, 'background');
         colorize(['.my-div-icon'], window.colors, 20, 'background');
         colorize(['#map'], window.colors, 200, 'border-color');
-        mapColorize()
+        mapColorize();
+    }
         
-	}
-});
+    });
 }
 
 

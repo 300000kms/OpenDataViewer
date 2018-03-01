@@ -72,7 +72,7 @@ function getDataFromUrl(url, city){
             return xhr;
         },
         success: function(data){
-            console.log(data)
+            //console.log(data)
             $('#loading').fadeOut();
             stats = doTable(data)
             stats['name'] = city;
@@ -126,10 +126,14 @@ function doTable(data){
 
     html += '</tr></thead>'
     
+    nfiles=0
+    lpublication =''
     dic = []
     ndatasources = da.length;
     for(d in da){
+        nfiles+=da[d].resources.length
         for (r in da[d].resources){
+            
             //console.log(da[d])
             try{
                 year = da[d].resources[r].name.split('.')[0];
@@ -157,6 +161,9 @@ function doTable(data){
             dict['url']=da[d].resources[r].url
             dict['downs']=downs
             dic.push(dict)
+            
+            
+            if (publication>lpublication){lpublication=publication}
         }
     }
     
@@ -241,7 +248,7 @@ function doTable(data){
     
     $('#tab_filter input').click(function() {
         $('html, body').animate({
-            scrollTop: $('#tab_filter input').offset().top
+            scrollTop: $('#tab_filter input').offset().top-20
         }, 200);
     });
     
@@ -249,7 +256,7 @@ function doTable(data){
     spinOff()
     
     //resum
-    var res2 = alasql('SELECT COUNT(i), SUM( DISTINCT author ) as aa,COUNT( DISTINCT author ), SUM(DISTINCT department) dd, notes, descr, year, publication, SUM(url) as url, SUM(CAST(downs AS NUMBER)) as downs FROM ?',[dic])[0]; 
+    var res2 = alasql('SELECT COUNT(i), SUM( DISTINCT author ) as aa, COUNT( DISTINCT author ), SUM(DISTINCT department) dd, notes, descr, year, publication, SUM(url) as url, SUM(CAST(downs AS NUMBER)) as downs FROM ?',[dic])[0]; 
     //console.log(res2)
     
     stats={}
@@ -257,7 +264,8 @@ function doTable(data){
     stats.authors = res2.aa;
     stats.departments = res2.dd;
     stats.downloads = res2.downs;
-    
+    stats.nfiles =nfiles; 
+    stats.publication=lpublication
     return stats
 }
 
@@ -285,13 +293,25 @@ function conf(data){
     //http://api.jquery.com/before/
     //$('body').append('<div id="main"><div id="city"></div></div>');
     html = ''
-    html += 'the open data portal from '
-    html += data.name
+    html += 'The open data portal of '
+    html += '<strong>'+data.name+'</strong>'
     html += ' has '
-    html += data.ndatasources
-    html += ' datasources with '
-    html += data.downloads 
-    html += ' downloads '
+    html += '<strong>'+data.ndatasources+'</strong>'
+    html += ' datasources and '
+    html += '<strong>'+data.nfiles+'</strong>'
+    html += ' files'
+    if(data.downloads>0){
+        html += ' with a total of '
+        html += '<strong>'+data.downloads +'</strong>'
+        html += ' downloads. '
+       }else{
+           html += '. '
+       }
+    if(data.publication){
+       html += '<br> The last dataset was uploaded on '
+       html+= '<strong>'+stats.publication+'</strong>'
+       }
+    
     html += ''
     
     $('#city').html(html)
@@ -312,38 +332,42 @@ function spinOff(){
 
 
 function placeholder(dic){
-    return
+    //return
     n = null;
     c = 0;
     setInterval(function(){
-        if (n == null){
-            r = parseInt(Math.random()*dic.length); 
-            n = dic[r]['notes'];
-            n = n.split('. ')[0] 
-            n = n.slice(0,100)
-            c=0;
-            $('#tab_filter label input').attr('placeholder','')
+        if (animate){
+            if (n == null){
+                r = parseInt(Math.random()*dic.length); 
+                n = dic[r]['notes'];
+                n = n.split('. ')[0] 
+                n = n.slice(0,100)
+                c=0;
+                $('#tab_filter label input').attr('placeholder','')
+            }
+            p=$('#tab_filter label input').attr('placeholder')
+            $('#tab_filter label input').attr('placeholder', p+n[c])
+            c+=1
+            if (n.length==c){n=null}
         }
-        p=$('#tab_filter label input').attr('placeholder')
-        $('#tab_filter label input').attr('placeholder', p+n[c])
-        c+=1
-        if (n.length==c){n=null}
     }, 40);
 }
 
 
-window.colors= ['magenta', 'cyan', 'yellow','red', 'blue', ];
+window.colors= ['magenta','cyan', 'yellow', 'lime', 'pink' , '#84ff2a', '#2a95ff' ];
 function colorize(labels, colors, p, property){
-    if(animate){
+    
         setInterval(function(){
-            le = $(labels[0]).length
-            r = parseInt(Math.random()*le);
-            color = colors[parseInt(Math.random()*colors.length)]
-            for(l in labels){
-                $(labels[l]).eq(r).css(property, color)
+            if(animate){
+                le = $(labels[0]).length
+                r = parseInt(Math.random()*le);
+                color = colors[parseInt(Math.random()*colors.length)]
+                for(l in labels){
+                    $(labels[l]).eq(r).css(property, color)
+                }
             } 
         }, p);
-    } 
+     
 }
 
 $(document).ready(function () {
@@ -359,8 +383,9 @@ $(document).ready(function () {
 //    })
     
     getDataFromUrl(cityUrl, city);
-    animate= false;
-     colorize(['body'], colors, 200, 'background')
-
-    
+    animate= true;
+    colorize(['#city'], colors, 1000, 'color')
+    colorize(['#loading'], colors, 200, 'background')
+    colorize(['#raw'], colors, 1000, 'border-color')
+    colorize(['.group-start'], colors, 10, 'background')
 })

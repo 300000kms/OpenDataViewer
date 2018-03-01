@@ -7,33 +7,31 @@
     <title>ODV</title>
     <link rel="shortcut icon" href="fav.png">
     
-    <meta name="General Theory of Urbanization"/>
+    <meta name="Happy Open Data Day!"/>
     <meta name="author" content="http://www.300000kms.net"/>
     <meta http-equiv="X-UA-Compatible" content="IE=10"/>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109032290-2"></script>
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-41416352-8"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'UA-109032290-2');
+      gtag('config', 'UA-41416352-8');
     </script>
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@300000kms">
     <meta name="twitter:creator" content="@300000kms">
-    <meta name="twitter:title" content="General Theory of Urbanization">
-    <meta name="twitter:description" content="General Theory of Urbanization">
-    <meta name="twitter:image" content="http://tgu.urbanization.org/sn.png">
+    <meta name="twitter:title" content="odv">
+    <meta name="twitter:description" content="odv">
+    <meta name="twitter:image" content="http://od.300000kms.net/odv.gif">
 
-    <meta property="og:title" content="General Theory of Urbanization" />
+    <meta property="og:title" content="ODV" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://tgu.urbanization.org" />
-    <meta property="og:image" content="http://tgu.urbanization.org/sn.png" />
-    <meta property="og:description" content="General Theory of Urbanization" />
-
+    <meta property="og:url" content="http://od.300000kms.net/index.html" />
+    <meta property="og:image" content="http://od.300000kms.net/odv.gif" />
+    <meta property="og:description" content="odv" />
    
     <!--carga librerias-->
     <script src="vendor/jquery-1.12.0.min.js"></script>
@@ -59,6 +57,55 @@
 </head>
 
 <body>
+    <div id="help" onclick="$('#helpcontent').css('display', 'flex')" >?</div>
+    <div id="helpcontent" onclick="$('#helpcontent').css('display', 'none')">
+        
+           <div class="txt">
+           
+           <div style="display: block; clear: both; text-align: center; font-size: 12px;">
+               <div style="text-align: -webkit-center;"><img style="height:100px; width:100px" src="img/es16_2_red_f.gif"> <br>This marker contains a link to the Open Data Viewer!!</div>
+               <div style="text-align: -webkit-center;"class="marker-cluster"><div></div> <br>This marker is a cluster of Open Data Portals</div>
+               <div style="text-align: -webkit-center;"><div class="my-div-icon"></div><br>This marker contains a link to visit an Open Data Portal</div>
+           </div>
+           
+           <div style="display: block; clear: both">    
+                <h1>ODD18</h1>
+                <h2>we love open data</h2>
+
+                <br>
+                Thanks to open data,  300.000Km/s can work by advising public bodies in decision making processes to have better cities, but also thanks to open data, administrations are more transparent and citizens can be more proactive.
+                <br>
+
+                <br>
+                At 300,000Km/s we spent many hours browsing through various open data portals, looking for datasets that are often not labelled properly, searching for updates, correcting errors of format and encoding, trying to use different APIs with distinct methods and security criteria...
+                <br>
+
+                <br>
+                In future, we would like to see an open data that exceeds administrative boundaries, a real interoperability within OD portals and well encoded files. We hope that all the time each of us invests in dealing with OD portals, it will serve to improve the experience of the rest of the community, We wish that citizens use open data more and better. We expect that someday 500 datasets will never be enough.
+                <br>
+
+                <br>
+                To celebrate the ODD'18, we have published in open format (also available in <a href="https://github.com/300000kms/OpenDataViewer
+">github</a>) a set of tools that we use to browse OD portals. It is a prototype.
+                <br>
+
+                <br>
+                 The first tool is a map with a large number of OD portals (most data has been obtained from <a href="https://www.opendatasoft.com/a-comprehensive-list-of-all-open-data-portals-around-the-world/">https://www.opendatasoft.com</a>), 
+                <br>
+
+                <br>
+                The second tools is a content viewer of OD portals, designed to access the information in an easy manner. With a single click, you can download all the available datasets and conduct a quick search. By the moment only works with CKAN (do you help us to integrate other portals?)
+                <br>
+
+                <br>
+                Finally, we have modified the great tool RAWGraphs. You can use it to visualize the data from each portal. With this modification, <a href="https://rawgraphs.io/">RAWGraphs</a> can read the hash of the url associated to the csv you want to visualise. Now is your turn to enjoy browsing open data and creating your own visualizations.
+                <br>
+
+                <br>
+                <h2>Happy open data day!</h2>
+            </div>
+        </div>
+    </div>
     <div id="welcome" onclick="$(this).fadeOut()">open<br>data<br>day!</div>
     <div id="map"></div>
 </body>

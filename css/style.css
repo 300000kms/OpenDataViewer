@@ -13,7 +13,9 @@ body{
     font-size: 12px;
     overflow-x: hidden;
     /*background: rgba(0,0,0,0.1)*/
-    background: red;
+    -webkit-transition: background-color 2000ms linear;
+    -ms-transition: background-color 2000ms linear;
+    transition: background-color 2000ms linear;
 }
 
 #raw{
@@ -25,7 +27,6 @@ body{
     left:0px;
     display: none;
     border:20px solid rgb(64,64,64);
-    
 }
 
 #rawcontent{
@@ -34,19 +35,20 @@ body{
 }
 
 #main{
-    height:50%;
+    /*height:50%;*/
     width:auto;
     padding: 20px;
 }
 
 #city{
-    font-size: 50px;
-    font-weight: 900
+    font-size:8vh;
+    font-weight: 100;
+    transition: color 1000ms linear;
 }
 
 #close {
     position: fixed;
-    right: 30px;
+    right: 40px;
     top: 30px;
     font-size: 40px;
     font-weight: 900;
@@ -100,7 +102,7 @@ body{
     justify-content: center;
     font-size: 60px;
     font-weight: 900;
-    color:gray;
+    color:rgba(0,0,0,0.5);
 }
 
 input::placeholder{
@@ -159,23 +161,24 @@ input::placeholder{
     margin: 2px;
     float: left;
     margin-right: 4px;
-    background-color: gray;
-    color: white;
+    background-color: rgba(0,0,0,0.5);
+    color: black;
     padding: 1px;
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 2px;
-    border: 1px solid rgba(255,255,255,0.4);
+    border: 1px solid rgba(0,0,0,1);
     max-width: 50px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
 }
 
 
 
-.format a{
-    color:white;
+ a.format{
+    color:black;
     text-decoration: none;
     font-weight: 900;
 }
@@ -193,7 +196,7 @@ td a{
     color:white;
 }
 
-.csv{background-color: black;}
+.csv{background-color: transparent;}
 
 /*--------------------------*/
 
@@ -208,7 +211,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
 
 table.dataTable thead th, table.dataTable thead td {
-    padding: 1px 10px;
+    /*padding: 1px 10px;*/
     border-bottom: 1px solid #111;
     text-align: center;
 }
@@ -224,6 +227,7 @@ table.dataTable tr.group td {
     background-color: transparent;
     border-top: 2px solid black !important;
     font-size: 16px;
+    
 }
 
 table.dataTable.display tbody tr.even>.sorting_1, table.dataTable.order-column.stripe tbody tr.even>.sorting_1 {
@@ -231,7 +235,7 @@ table.dataTable.display tbody tr.even>.sorting_1, table.dataTable.order-column.s
 }
 
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
-    border-top: 1px dotted #929292;
+    border-top: 1px dotted rgba(0,0,0,0.5);
     padding-top: 5px;
         margin-top: 10px;
 }
@@ -244,7 +248,8 @@ table.dataTable.display tbody tr.odd>.sorting_1, table.dataTable.order-column.st
 
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
     content: '-' !important;
-    background-color: #000000 !important;
+    /*background-color: #000000 !important;*/
+    background: transparent;
 }
 
 
@@ -255,22 +260,22 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
     width: 14px;
     display: block;
     position: absolute;
-    color: white;
-    border: 2px solid white;
+    color: black;
+    border: 2px solid black;
     border-radius: 14px;
-    box-shadow: 0 0 0px #444;
+    box-shadow: none;
     box-sizing: content-box;
     text-align: center;
     text-indent: 0 !important;
     font-family: 'Courier New', Courier, monospace;
     line-height: 16px;
     content: '+';
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.0);
     font-weight: 900;
 }
 
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
-    background-color: #0c0c0c;
+    background-color: rgba(0,0,0,0.7);
     color: white;
 }
 
@@ -283,7 +288,7 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 
 
 table.dataTable>tbody>tr.child:hover {
-    background: rgb(0,0,0) !important;
+    background: rgba(0,0,0,0.7) !important;
 }
 
 table.dataTable>tbody>tr.child ul.dtr-details {
@@ -305,13 +310,48 @@ table.dataTable>tbody>tr.child ul.dtr-details {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     color: #333 !important;
     border: 1px solid #979797;
-    background: white;
+    background: transparent;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
     color: white !important;
     border: 1px solid #111;
     background: black;
+}
+
+table.dataTable tbody tr {
+    background-color: transparent;
+}
+
+
+table.dataTable>tbody>tr.child ul.dtr-details>li {
+    border-bottom: 1px solid #000000;
+    padding: 0.5em 0;
+}
+
+
+/*
+table.dataTable thead .sorting {
+    background-image: url(sort_both.png);
+}
+*/
+
+table.dataTable thead .sorting::after {
+    content:"";
+    opacity:0.5;
+    background-image: url(sort_both.png);
+}
+
+table.dataTable thead .sorting_asc {
+    background-image: url(sort_asc.png);
+}
+
+table.dataTable thead .sorting_desc {
+    background-image: url(sort_desc.png);
+}
+
+.group-start{
+    transition: background 200ms linear;
 }
 /*-------------------------*/
 
