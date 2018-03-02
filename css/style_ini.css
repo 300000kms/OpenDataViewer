@@ -168,6 +168,17 @@ img.leaflet-marker-icon{
     border-radius: 0px;
 }
 
+.leaflet-marker-icon2 {
+    background: transparent;
+    opacity:0.8;
+    font-weight: 900;
+    border-radius: 500px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.5);
+}
+
+
+
 #help {
     position: absolute;
     z-index: 999;
@@ -215,7 +226,7 @@ img.leaflet-marker-icon{
   50% {
     font-size: 150px;
       transform: rotate(360deg);
-      border: 50px dotted lime;
+      border: 50px dotted magenta;
       border-radius: 500px;
       width:150px;
       color:cyan;

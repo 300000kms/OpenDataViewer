@@ -27,13 +27,14 @@ https://stackoverflow.com/questions/17416274/ajax-get-size-of-file-before-downlo
 cors = 'https://crossorigin.me/';
 cors = 'raw/get.cgi?url=';
 cors = 'http://www.atnight.ws/od/raw/getcsv.cgi?url=';
+cors = 'http://od.300000kms.net/raw/getcsv.cgi?url=';
 
 function getData(urljson){
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?callback=jQuery112006745389475568797_1510911664869&_=1510911664870
     //http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_show?id=trams&callback=lamevafuncio
     //https://coderwall.com/p/je3uww/get-progress-of-an-ajax-request
     $.ajax({
-        url: 'http://www.atnight.ws/od/get.cgi?url='+urljson.url,  //'http://www.atnight.ws/od/get.cgi?url='
+        url: 'http://od.300000kms.net/get.cgi?url='+urljson.url,  //'http://www.atnight.ws/od/get.cgi?url='
         type: 'GET',
         cache:true,
         //jsonp:'$callback',
@@ -59,7 +60,7 @@ function getData(urljson){
 
 function getDataFromUrl(url, city){
     $.ajax({
-        url: 'http://www.atnight.ws/od/get.cgi?url='+url,  //'http://www.atnight.ws/od/get.cgi?url='
+        url: 'http://od.300000kms.net/get.cgi?url='+url,  //'http://www.atnight.ws/od/get.cgi?url='
         type: 'GET',
         cache:true,
         dataType: "json",

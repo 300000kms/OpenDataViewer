@@ -74,56 +74,75 @@ function colorRandom(labels, colors, p, property){
 
 function loadMarkers(){
     Papa.parse("data/portales.csv", {
-	download: true,
-    header: true,
-    //step: function(row) {},
-	complete: function(results) {
-        
-        var myIcon  = L.divIcon({className: 'my-div-icon'});
-        
-        var LeafIcon = new L.Icon({
-                iconUrl: 'img/es16_2_red_f.gif',
-                iconSize:     [150, 150],
-                iconAnchor:   [75, 75],
-                popupAnchor:  [0, 0]
-            }
-        );
-        
-        var myIconStar  = L.divIcon({
-            className: 'star-five',
-        });
-        
-		var markers = L.markerClusterGroup({showCoverageOnHover:false});
-        
-        map.addLayer(markers);
-        
-        re = results['data'];
-        
-        for(r in re){
-            if(re[r]['location']){
-                marker = L.marker(re[r]['location'].split(','), {
-                    icon: L.divIcon({className: 'my-div-icon',
-                                       html: '<div class="ciutat">'+re[r].name+'</div>'
-                                     }), 
-                    title: re[r].name,
-                });
-                marker.bindPopup('<a target="_blank" href="'+re[r].url+'">visit: <br>'+re[r].name+'<br>'+re[r].country+'</a>');
-                markers.addLayer(marker);
-            };
-            
-            if (re[r]['url_api']!='' && re[r]['location']){
-                marker = L.marker(re[r]['location'].split(','), {icon: LeafIcon, title: re[r].name, opacity:0.8,} );
-                url = 'data.html?city='+re[r].name+'&url='+re[r].url_api
-                marker.bindPopup('<a href="'+url+'">'+re[r].name+'<br>BROWSE!</a>');
-                map.addLayer(marker)
-            };
-        };
+        download: true,
+        header: true,
+        //step: function(row) {},
+        complete: function(results) {
 
-        colorize(['.marker-cluster div'], window.colors, 2, 'background');
-        colorize(['.my-div-icon'], window.colors, 20, 'background');
-        colorize(['#map'], window.colors, 200, 'border-color');
-        mapColorize();
-    }
+            var myIcon  = L.divIcon({className: 'my-div-icon'});
+
+            var LeafIcon = new L.Icon({
+                    iconUrl: 'img/es16_2_red_f.gif',
+                    iconSize:     [150, 150],
+                    iconAnchor:   [75, 75],
+                    popupAnchor:  [0, 0]
+                }
+            );
+
+            var myIconStar  = L.divIcon({
+                className: 'star-five',
+            });
+
+            var markers = L.markerClusterGroup({
+                showCoverageOnHover:false,
+                maxClusterRadius:80,
+                
+                iconCreateFunction: function (cluster) {
+                    console.log(cluster)
+                    var n = cluster.getChildCount();
+                    if(n>80){n=80}else if(n<30){n=30};
+                    return L.divIcon({ 
+                        html: '<div style="line-height:'+n+'px"><span>'+n+'</span></div>', 
+                        className: 'leaflet-marker-icon2', 
+                        iconSize:L.point(n, n) ,
+                        //iconAnchor	:L.point(n/2, n/2) ,
+                    });
+                },
+                
+
+            });
+
+            map.addLayer(markers);
+
+            re = results['data'];
+
+            for(r in re){
+                if(re[r]['location']){
+                    marker = L.marker(re[r]['location'].split(','), {
+                        icon: L.divIcon({className: 'my-div-icon',
+                                           html: '<div class="ciutat">'+re[r].name+'</div>'
+                                         }), 
+                        title: re[r].name,
+                    });
+                    marker.bindPopup('<a target="_blank" href="'+re[r].url+'">visit: <br>'+re[r].name+'<br>'+re[r].country+'</a>');
+                    markers.addLayer(marker);
+                };
+
+                if (re[r]['url_api']!='' && re[r]['location']){
+                    marker = L.marker(re[r]['location'].split(','), {icon: LeafIcon, title: re[r].name, opacity:0.8,} );
+                    url = 'data.html?city='+re[r].name+'&url='+re[r].url_api
+                    marker.bindPopup('<a href="'+url+'">'+re[r].name+'<br>BROWSE!</a>');
+                    map.addLayer(marker)
+                };
+            };
+
+            //colorize(['.marker-cluster div'], window.colors, 2, 'background');
+            colorize(['.leaflet-marker-icon2'], window.colors, 2, 'background');
+            
+            colorize(['.my-div-icon'], window.colors, 20, 'background');
+            colorize(['#map'], window.colors, 200, 'border-color');
+            mapColorize();
+        }
         
     });
 }
